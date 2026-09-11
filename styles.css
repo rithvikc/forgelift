@@ -115,10 +115,47 @@ h2 {
 .btn-lg { padding: 16px 32px; font-size: 0.95rem; }
 .btn-full { width: 100%; justify-content: center; }
 
+/* ===== TOP BAR ===== */
+.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 101;
+  background: var(--navy);
+  padding: 7px 0;
+}
+.topbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.topbar-inner > span {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.5);
+}
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.topbar-right a {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.topbar-right a:hover { color: #fff; }
+.topbar-right a svg { flex-shrink: 0; }
+
 /* ===== NAV ===== */
 .nav {
   position: fixed;
-  top: 0; left: 0; right: 0;
+  top: 33px; /* height of topbar */
+  left: 0; right: 0;
   z-index: 100;
   background: var(--white);
   border-bottom: 1px solid var(--border);
@@ -228,7 +265,7 @@ h2 {
   display: grid;
   grid-template-columns: 44fr 56fr;
   min-height: 100vh;
-  padding-top: 70px; /* nav height */
+  padding-top: 103px; /* topbar 33px + nav ~70px */
 }
 
 .hero-left {
@@ -882,6 +919,9 @@ h2 {
 }
 
 @media (max-width: 900px) {
+  .topbar { display: none; }
+  .nav { top: 0; }
+  .hero { padding-top: 70px; }
   .nav-links, .nav-phone, .nav-cta { display: none; }
   .hamburger { display: flex; }
   .fleet-head { flex-direction: column; align-items: flex-start; gap: 16px; }

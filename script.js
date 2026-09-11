@@ -61,22 +61,48 @@ if (heroSearch) {
   });
 }
 
-/* ===== FORM ===== */
+/* ===== FORM — sends to info@forgelifts.com.au via Formsubmit ===== */
 document.getElementById('quoteForm').addEventListener('submit', (e) => {
   e.preventDefault();
-  const btn = e.target.querySelector('button[type="submit"]');
+  const form = e.target;
+  const btn = form.querySelector('button[type="submit"]');
+  const orig = btn.textContent;
   btn.textContent = 'Sending…';
   btn.disabled = true;
-  setTimeout(() => {
-    e.target.innerHTML = `
-      <div class="form-success">
-        <div class="si">
-          <svg viewBox="0 0 24 24" fill="none" width="28"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <h4>Enquiry Received!</h4>
-        <p>We'll be back to you shortly. For urgent jobs call <a href="tel:1300000000">1300 FOR LIFT</a>.</p>
-      </div>`;
-  }, 1000);
+
+  const fd = new FormData(form);
+  const payload = {
+    _subject: 'New Enquiry — Forge Lift Forklifts',
+    _captcha: 'false',
+    name:    fd.get('name')    || '',
+    company: fd.get('company') || '',
+    phone:   fd.get('phone')   || '',
+    email:   fd.get('email')   || '',
+    service: fd.get('service') || '',
+    message: fd.get('message') || '',
+  };
+
+  fetch('https://formsubmit.co/ajax/info@forgelifts.com.au', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+    .then(r => r.json())
+    .then(() => {
+      form.innerHTML = `
+        <div class="form-success">
+          <div class="si">
+            <svg viewBox="0 0 24 24" fill="none" width="28"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h4>Enquiry Sent!</h4>
+          <p>We'll be in touch shortly. For urgent jobs call <a href="tel:1300000000">1300 FOR LIFT</a>.</p>
+        </div>`;
+    })
+    .catch(() => {
+      btn.textContent = orig;
+      btn.disabled = false;
+      alert('Something went wrong. Please email us directly at info@forgelifts.com.au or call 1300 FOR LIFT.');
+    });
 });
 
 /* ===== SMOOTH SCROLL ===== */
